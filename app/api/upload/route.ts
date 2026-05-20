@@ -1,5 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3, BUCKET } from "@/lib/s3";
+import { getDb } from "@/lib/db";
 
 export async function POST(request: Request) {
   if (!BUCKET) {
@@ -27,6 +28,9 @@ export async function POST(request: Request) {
       ContentType: file.type,
     })
   );
+
+  const sql = await getDb();
+  await sql`INSERT INTO decks (filename, s3_key, status) VALUES (${file.name}, ${key}, 'pending')`;
 
   return Response.json({ key, filename: file.name });
 }
