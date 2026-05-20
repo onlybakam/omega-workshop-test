@@ -1,5 +1,7 @@
 import { getDb } from "@/lib/db";
 import Link from "next/link";
+import AnalyzeButton from "../components/AnalyzeButton";
+import MarkdownContent from "../components/MarkdownContent";
 
 interface Deck {
   id: string;
@@ -31,29 +33,43 @@ export default async function DecksPage() {
       {decks.length === 0 ? (
         <p className="text-gray-500 text-sm">No decks uploaded yet.</p>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {decks.map((deck) => (
             <div
               key={deck.id}
-              className="flex items-center justify-between rounded-md border border-gray-200 bg-white px-4 py-3"
+              className="rounded-md border border-gray-200 bg-white px-4 py-3"
             >
-              <div>
-                <p className="text-sm font-medium text-gray-800">
-                  {deck.filename}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {new Date(deck.uploaded_at).toLocaleDateString()}
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-800">
+                    {deck.filename}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(deck.uploaded_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <span
+                  className={`ml-3 shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    deck.status === "analyzed"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-amber-100 text-amber-800"
+                  }`}
+                >
+                  {deck.status === "analyzed" ? "✓ Analyzed" : "Pending"}
+                </span>
               </div>
-              <span
-                className={`ml-3 shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  deck.status === "analyzed"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-amber-100 text-amber-800"
-                }`}
-              >
-                {deck.status === "analyzed" ? "✓ Analyzed" : "Pending"}
-              </span>
+
+              {deck.status === "analyzed" && deck.analysis && (
+                <div className="mt-3 rounded-md bg-gray-50 border border-gray-200 p-4">
+                  <MarkdownContent content={deck.analysis} />
+                </div>
+              )}
+
+              {deck.status !== "analyzed" && (
+                <div className="mt-3">
+                  <AnalyzeButton deckId={deck.id} />
+                </div>
+              )}
             </div>
           ))}
         </div>

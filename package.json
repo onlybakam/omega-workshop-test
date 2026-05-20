@@ -9,12 +9,16 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/amazon-bedrock": "^4.0.107",
     "@aws-sdk/client-s3": "^3.1050.0",
+    "@aws-sdk/credential-providers": "^3.1050.0",
     "@aws-sdk/dsql-signer": "^3.1050.0",
+    "ai": "^6.0.185",
     "next": "16.2.6",
     "postgres": "^3.4.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "streamdown": "^2.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
